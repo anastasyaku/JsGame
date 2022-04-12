@@ -1,2 +1,2 @@
 # JsGame
-Test js game, in developping 
+Test js game, in developing 
