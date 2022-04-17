@@ -1,39 +1,67 @@
 function Display(){
-	var time=true;
 	
-	this.Play = function(){
+	let time=true;
+	
+	this.Play = () => {
 	control.animate();	
 	if (time) control.timer();
  	window.addEventListener('click', control.point, false);
+		document.getElementById("pause").disabled = false;
+		document.getElementById("pause").style.background = "white";
+		document.getElementById("play").disabled = true;
+		document.getElementById("play").style.background = "#98DCD8";
+		 control.pause_press = false;
  }
 	
-  this.Start = function(){
+  this.Start = () => {
 	  
-	//alert('start');
 	control.initFish();
-control.animate();	
+	control.animate();	
 	 control.timer();
- 
+	 document.getElementById("start").disabled = true;
+	  document.getElementById("start").style.background = "#98DCD8";
+	  document.getElementById("play").disabled = true;
+	  document.getElementById("play").style.background = "#98DCD8";
+	  document.getElementById("pause").disabled = false;
+	  document.getElementById("pause").style.background = "white";
+	   control.pause_press = false;
+	   console.log(` start btn ${control.pause_press}`);
+
  }
  
- this.Pause = function (){
+ this.Pause = () => {
 	 
 	clearInterval(Timer); 
 	  
 	clearInterval(Timer2); 
 	window.removeEventListener('click', control.point, false);
+	document.getElementById("play").disabled = false;
+	document.getElementById("play").style.background = "white";
+	 document.getElementById("pause").disabled = true;
+	 document.getElementById("pause").style.background = "#98DCD8";
+	 
+	 control.pause_press = true;
+	 console.log(` pause btn ${control.pause_press}`);
 	
  }
 	
-	this.test = function(){
-		time = false;
+	this.test = () => {
+		document.getElementById("gg").style.visibility = "hidden";
+		control.game_restart();
 		control.initFish();
-		control.animate();	
+		control.animate();
+		control.timer();
+
+		document.getElementById("start").disabled = true;
+		document.getElementById("start").style.background = "#98DCD8";
+		document.getElementById("play").disabled = true;
+		document.getElementById("play").style.background = "#98DCD8";
+		
 				}
 	
 	
 }
-///////////////////////////////////////////////////////
+
 
 
 
@@ -42,144 +70,160 @@ control.animate();
 
 function Controller(){
 	//Fish.call(this);
-	var n=40;
-var fish= new Array(n);
-	 var points=0;
-	var StopPress = true;
-	
+	let n=100;
+	let fish= new Array(n);
+	let points=0;
+	let StopPress = true;
+	this.pause_press = false;
 	 
 	this.keyDownHandler = function(e) {
-  //  alert (StopPress);
-   if(e.keyCode == 32) {
-     // alert (StopPress);
-	 if( StopPress) {
-	//	 alert (StopPress);
-		 //  alert('будет пауза');
-		   StopPress = false;
+     if(e.keyCode == 32) {
+    	 if( StopPress) {
+			StopPress = false;
 		   disp.Pause();
-		   
 	   }
 	   else{ 
-	   // alert (StopPress);
 	   StopPress = true; 
 	   disp.Play();}
     }
 	}
 		
 function clearBg(){
+
 	ct.clearRect(0,0,canvas.width, canvas.height);
 }
 	 
 	 
  function drawFish(x,y,size){
-	//alert('draw');
-			 this.img;
-	// this.fish;
 		
-		img = new Image();   
+		this.img = new Image(); ;
 		img.src = 'img/fish1.png'; 
-		ct.drawImage(img, x,y, size,size);
-  
-  }
-  
-  
-  
-  
 	
-  this.animate = function(){
-//	alert('animate');
-		Timer=setInterval(function (){
-		clearBg();
 		
-	for(var i=0; i < n; i++){
+		ct.drawImage(img , x, y, size, size);
+	
+  }
+
+
+
+
+	this.animate = function(){
+		Timer=setInterval(() => {
+			clearBg();
+
+
+
+
+
+			/*	for (let xs = 0.5; xs < 400; xs += 10) {
+				  ct.moveTo(xs, 0);
+				  ct.lineTo(xs, 400);
+				}
+
+				for (let ys = 0.5; ys < 400; ys += 10) {
+				  ct.moveTo(0, ys);
+				  ct.lineTo(400, ys);
+				}
+
+				ct.strokeStyle = "#888";
+				ct.stroke(); */
+		for(let i=0; i < n; i++){
 		if (fish[i].Getlife()){
-			//alert('notkilled');
-		//	 alert('xc'+xC);
 		fish[i].x= fish[i].MoveX(fish[i].x,fish[i].speed);	
-//alert('get1'+fish.x);
-		
 		drawFish(fish[i].x, fish[i].y, fish[i].size);
 		}
 		else {
-		//	alert('killed');
 			fish[i].y=fish[i].Delete(fish[i].y);
 			drawFish(fish[i].x, fish[i].y, fish[i].size);
 		}
 		
 	}
 		}, 20);
-		//alert(k);
+		
 	
 	 
  }
  
  this.initFish = function(){
-	
-//	alert('init');
-	for(var i=0; i < n; i++)
+
+	for(let i=0; i < n; i++)
 	{
 		fish[i] = new Fish();
-//	alert(fish[i].size_rand);
-		switch (fish[i].size_rand) { //в зависимости от значения операции, производим действие
+		switch (fish[i].size_rand) { 
 			  case 0:
-		//	  alert('nol');
 			  fish[i].size=50;
 			  fish[i].point_f=1;
-				fish[i].speed=1;
+				fish[i].speed=3;
 				break;
 				
 				 case 1:
-		//		  alert('odin');
+		
 			  fish[i].size=40;
 			    fish[i].point_f=3;
-				fish[i].speed=2;
+				fish[i].speed=4;
 				break;
 				
 				 case 2:
-			//	  alert('dva');
+			
 			  fish[i].size=30;
 			    fish[i].point_f=5;
-				fish[i].speed=4;
+				fish[i].speed=5;
 				break;
 	
 		}
+	
+	
 	drawFish(fish[i].x, fish[i].y, fish[i].size);
+	//console.log(` init fish[${i}] x: ${fish[i].x}  y:${fish[i].y} `);
 	
 	}
-	 // alert(fish.x);
-	//drawFish(fish.x, fish.y);
+	
 
 	}
  
-this.timer = function (){
-	var min=1;
-	 var sec=60;
-	Timer2=setInterval(function (){
+this.timer = () => {
+	let min=1;
+	 let sec=60;
+	Timer2=setInterval(() => {
 		sec--;
 		if (sec==0) {sec = 60;
 		min--;}
-		document.clockform.clock.value =min+":"+sec;
-		
+
+		document.getElementById('clock').value = ` ${min} : ${sec}`;
 		if ((sec==60)&&(min==-1)) {
-			//alert('gg');
 			game_over();
 		}		
-		
-		
-		
 		}, 500);
 	
 	
 	
 	
-}	
+}
+
+	this.game_restart= () =>  {
+		clearInterval(Timer);
+		clearInterval(Timer2);
+		for(var i=0; i < n; i++)
+		{ fish[i] = undefined;}
+
+		document.getElementById("start").disabled = false;
+		document.getElementById("play").disabled = false;
+		document.getElementById("pause").disabled = false;
+		document.getElementById("start").style.background = "white";
+		document.getElementById("play").style.background = "white";
+		document.getElementById("pause").style.background = "white";
+		//console.log(points);
+		points = 0;
+		//console.log(points);
+		let p = document.getElementById('points').innerHTML = `${points}`;
+		pause_press = false;
+	}
+
 	function game_over() {
-		clearInterval(Timer); 
-	  
-	clearInterval(Timer2); 
-		
-		var g = document.getElementById('gg');
-		g.innerHTML = "Game Over";
+	clearInterval(Timer); 
+	clearInterval(Timer2);
+
+	document.getElementById("gg").style.visibility = "visible";
 		
 		
 	for(var i=0; i < n; i++)
@@ -188,59 +232,50 @@ this.timer = function (){
 		document.getElementById("start").disabled = true;
 		document.getElementById("play").disabled = true;
 		document.getElementById("pause").disabled = true;
-		document.getElementById("test").disabled = true;
+
 		document.getElementById("start").style.background = "#98DCD8";
 		document.getElementById("play").style.background = "#98DCD8";
 		document.getElementById("pause").style.background = "#98DCD8";
-		document.getElementById("test").style.background = "#98DCD8";
-		document.clockform.clock.value ="0:0";
+
+		document.getElementById('clock').value  ="0:0";
 	}
 	
 	
-	function findOffset(obj) {
-		var x_p;
-			var y_p;
-    var curX = curY = 0;
-    if (obj.offsetParent) {
-        do {
-            curX += obj.offsetLeft;
-            curY += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-    return {
-	x_p:curX,
-	y_p:curY};
-    }
-}
 
 
-this.point = function (){
+
+this.point = (e) => {
 	
- var pos = findOffset(canvas);
-    //alert(pos.x_p+' пос'+pos.y_p);
-    mouseX = event.clientX - pos.x_p;
-    mouseY = event.clientY - pos.y_p;
-//alert(mouseX+' my coords '+mouseY);
+	 console.log(` point btn ${this.pause_press}`);
+	if (!this.pause_press){	
+	//	mouseX = event.clientX - pos.x_p;
+	//	mouseY = event.clientY - pos.y_p;
+		
+		//console.log(e.offsetX+' offset '+e.offsetY);
+	//	console.log(mouseX+' mouse '+mouseY);
+		//console.log(event.clientX+' event.clientX '+event.clientY);
+		//console.log(pos.x_p+' pos.x_p '+pos.y_p);
+	 for(let i=0; i < n; i++){
+			//console.log(` point ${fish[i].x}  : ${fish[i].y}`);
+			
+			
+		//	if( mouseX>fish[i].x-fish[i].size && mouseX<fish[i].x+fish[i].size  && mouseY>fish[i].y-fish[i].size && mouseY<fish[i].y+fish[i].size )
+			if( (e.offsetX<(fish[i].x+fish[i].size)) && (e.offsetX>fish[i].x)  && (e.offsetY>fish[i].y) && (e.offsetY<fish[i].y+fish[i].size) )
+			{
+			
+			fish[i].Setlife(false);
+			let p = document.getElementById('points');
+			points=points+fish[i].point_f;
+			//ole.log( `  Point for fish fish ${fish[i].point_f} , total ${points}`);
+			p.innerHTML = `${points}`;
 
-//alert(fish.x+'fish'+fish.y);
 
- for(var i=0; i < n; i++){
-if( mouseX>fish[i].x-fish[i].size && mouseX<fish[i].x+fish[i].size  && mouseY>fish[i].y-fish[i].size && mouseY<fish[i].y+fish[i].size ){
-//	alert(fish[i].x+'fish'+fish[i].y);
-//alert('Good work');
-fish[i].Setlife(false);
-fish[i].Setlife(true);
-var p = document.getElementById('points');
-	//	alert('point'+fish[i].point_f);
-		points=points+fish[i].point_f;
-		//alert('points'+points);
-		p.innerHTML =points;
-//f_img.src = 'img/fish2.png'; 
-
-}
+			}
 
 
- }
-
+	 }
+	 
+	}
 
 
 }
@@ -250,57 +285,34 @@ var p = document.getElementById('points');
 	
 
 
-////////////////////////////////////////////////
 
 
 function Fish(){
-	this.x = (-1)*Math.floor(Math.random()*2500);
-	this.y =  Math.floor(Math.random()*(canvas.height));
+	this.x = Math.floor(Math.random()*400)*(-1)*(Math.floor(Math.random()*100));
+	this.y =  Math.floor(Math.random()*(300));
 	this.point_f;
 	this.size_rand=Math.floor(Math.random()*3);
-		this.size;
-	 var life=true;
+	this.size;
+	let life=true;
 	this.speed=Math.floor(Math.random()*3);;
 //	this.f_img = new Image(); 
-	
-	
-	 
 //	f_img.src = 'img/fish1.png'; 
 	
-	this.Getlife = function(){
-		return life;
+	this.Getlife = () => life;
+	
 		
-		
-	}
-		
-	this.Setlife = function(l){
-		if(typeof(l) === "boolean"){
-		
-		if (life!=false)
-		life = l;
+	this.Setlife = (l) => { if (life) life = l };	
 		
 	
-	}	
-//	alert(life);	
-	}	
-		
-	
-	this.MoveX = function(x, sp){
-	//alert('move');
-	//	alert(x);
+	this.MoveX = (x, sp) => {
 		x=x+sp;
-	//	alert('move '+x);
-		
 		return x;
 	}
 	
 	
-	this.Delete = function(y){
-		
-		//alert('delete');
+	this.Delete = (y) => {
 		y=y-8;
-		
-	return y;	
+		return y;	
 	}
 	
 	
@@ -311,24 +323,40 @@ function Fish(){
 	
 	
 }
+
 var disp;
 var control;
-
+var ct
 window.addEventListener("load", function (){
-	
+		
 	canvas = document.getElementById("game_canvas");
 	ct = canvas.getContext("2d");
-	canvas.width = 700;
-	canvas.height = 300;
+	
+		document.getElementById("play").disabled = true;
+		document.getElementById("pause").disabled = true;
+
+		
+		document.getElementById("play").style.background = "#98DCD8";
+		document.getElementById("pause").style.background = "#98DCD8";
+	
+	
+	
 	 disp = new Display();
 	 control = new Controller();
 
+	const canRect = canvas.getBoundingClientRect();
+	const scale = window.devicePixelRatio;
+
+
+	canvas.width = canRect.width * scale;
+	canvas.height = canRect.height * scale;
+	ct.scale(scale, scale);
+//	console.log(`${canvas.width} , ${canvas.height}`)
+	
+	canvas.addEventListener('click', control.point, false);
+	canvas.addEventListener("keydown",  control.keyDownHandler, false);
 	
 	
-	window.addEventListener('click', control.point, false);
-window.addEventListener("keydown",  control.keyDownHandler, false);
-	
-	//window.addEventListener('click', point, false);
 
 
 

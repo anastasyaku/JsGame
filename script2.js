@@ -1,38 +1,20 @@
 function Display(){
 	
 	
-	this.Play = function(){
+	this.Play = () => {
 	control.animate();	
-	 control.timer();
+	 control.timer();}
+	
+  this.Start = ()=>{
+		control.initFish();
+		control.animate();	
+		control.timer();}
  
- }
-	
-  this.Start = function(){
-	//alert('start');
-	control.initFish();
-	control.animate();	
-	 control.timer();
- 
- }
- 
- this.Pause = function (){
-	 
-	clearInterval(Timer); 
-	  
-	clearInterval(Timer2); 
- }
-	
-
-
-
-   
-
-	
-	
-	
+ this.Pause = () => {
+	 	clearInterval(Timer); 
+	  	clearInterval(Timer2); }
 	
 }
-///////////////////////////////////////////////////////
 
 
 
@@ -49,18 +31,17 @@ var life=true;
 	 var StopPress = true;
 	 
 	this.keyDownHandler = function(e) {
-  //  alert (StopPress);
+ 
    if(e.keyCode == 32) {
-     // alert (StopPress);
+   
 	 if( StopPress) {
-	//	 alert (StopPress);
-		 //  alert('будет пауза');
+	
 		   StopPress = false;
 		   disp.Pause();
 		   
 	   }
 	   else{ 
-	   // alert (StopPress);
+	 
 	   StopPress = true; 
 	   disp.Play();}
     }
@@ -85,28 +66,28 @@ function clearBg(){
   
 	
   this.animate = function(){
-	//alert('animate');
+	
 		Timer=setInterval(function (){
 		clearBg();
 	
 		if (life){
-			//alert('notkilled');
+			
 		fish.MoveX();			
 		drawFish(f_img,x,y);
 		}
 		else {
-		//	alert('killed');
+	
 			fish.Delete();
 			drawFish(f_img,x,y);
 		}
 		}, 20);
-		//alert(k);
+		
 	
 	 
  }
  
  this.initFish = function(){
-	// alert('init');
+	
 	  fish = new Fish();
 	drawFish(f_img,x,y);
 }
@@ -151,66 +132,40 @@ this.point = function (){
     
     mouseX = event.clientX - pos.x_p;
     mouseY = event.clientY - pos.y_p;
-//alert(mouseX+' my coords '+mouseY);
 
-//alert(x+'fish'+y);
 
  
  if( mouseX>x-100 && mouseX<x+100  && mouseY>y-100 && mouseY<y+100 ){
-//alert('Good work');
+
 life=false;
 }
- //var point = document.getElementById('point').innerHTML  = "You :"+points;
-//delete fish[i];
-
-
-
 
 }
 	
 }	
 	
-	
 
-
-////////////////////////////////////////////////
 
 
 function Fish(){
-	this.x;
-	this.y;
-	this.point;
+	this.x= -50;
+	this.y=  Math.floor(Math.random()*(canvas.height-50));;
+	this.point = 2;;
+	this.f_img = new Image();  ;
 	
-	this.f_img;
 	
-	
-	f_img = new Image();   
 	f_img.src = 'img/fish1.png'; 
 	
-	x = -50;
-	y =  Math.floor(Math.random()*(canvas.height-50));
-	
-	point = 2;
-	this.MoveX = function(){
-		x++;
-		
-		
-		
-	}
+
+	this.MoveX =() => x++;	
 	
 	
-	this.Delete = function(){
-		
-		//alert('delete');
+	this.Delete =() =>{
 		y=y-5;
-		var p = document.getElementById('points');
-		
-
-
-p.innerHTML =  "Points"+point;
-f_img.src = 'img/fish2.png'; 
-		
-	}
+		let p = document.getElementById('points');
+		p.innerHTML =  `Points ${point}`;
+	//	f_img.src = 'img/fish2.png'; 
+		}
 	
 	
 	
@@ -235,9 +190,9 @@ window.addEventListener("load", function (){
 	
 	
 	window.addEventListener('click', control.point, false);
-window.addEventListener("keydown",  control.keyDownHandler, false);
+	window.addEventListener("keydown",  control.keyDownHandler, false);
 	
-	//window.addEventListener('click', point, false);
+
 
 
 
